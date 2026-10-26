@@ -564,7 +564,7 @@ export default function App() {
         .replace(/학생/g, '학습자');
     };
 
-    const candidateModels = ['gemini-1.5-flash'];
+    const candidateModels = ['gemini-2.5-flash'];
     let lastError: any = null;
 
     for (const model of candidateModels) {
