@@ -218,7 +218,7 @@
         제 설명 중 '3번 문단'에서 이상한 부분을 다시 찾아봐 주세요. 기다릴게요! 😊`;
 
         // --- 상태 및 변수 ---
-        const API_KEY = import.meta.env.VITE_GEMINI_API_KEY; // 추후 실제 배포 시 여기에 발급받은 API 키를 입력하세요.
+        const API_KEY = import.meta.env.VITE_API_KEY_PART1 + import.meta.env.VITE_API_KEY_PART2; // 추후 실제 배포 시 여기에 발급받은 API 키를 입력하세요.
         let step = 0; // State Machine 변수
         let isProcessing = false;
 
