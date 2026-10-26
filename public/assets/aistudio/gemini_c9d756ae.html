@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가상 Gemini 대화창</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 폰트 적용 (Google 폰트와 유사한 Noto Sans) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        /* 스크롤바 커스텀 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* 타이핑 및 로딩 애니메이션 */
+        .dot-flashing {
+            position: relative;
+            width: 8px;
+            height: 8px;
+            border-radius: 5px;
+            background-color: #a1a1aa;
+            color: #a1a1aa;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            width: 8px;
+            height: 8px;
+            border-radius: 5px;
+            background-color: #a1a1aa;
+            color: #a1a1aa;
+            animation: dot-flashing 1s infinite alternate;
+        }
+        .dot-flashing::before {
+            left: -12px;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 12px;
+            animation-delay: 1s;
+        }
+        @keyframes dot-flashing {
+            0% { background-color: #a1a1aa; }
+            50%, 100% { background-color: #e4e4e7; }
+        }
+        
+        /* 텍스트 줄바꿈 처리 */
+        .whitespace-pre-wrap {
+            white-space: pre-wrap;
+            word-break: keep-all;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden text-gray-800">
+
+    <!-- 헤더 영역 -->
+    <header class="h-16 flex items-center px-6 border-b border-gray-100 flex-shrink-0">
+        <div class="flex items-center gap-2">
+            <span class="text-xl font-medium tracking-tight text-gray-600">가상 Gemini</span>
+            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-md">수업용</span>
+        </div>
+    </header>
+
+    <!-- 대화 영역 -->
+    <div id="chat-container" class="flex-1 overflow-y-auto px-4 py-8 md:px-20 lg:px-48 pb-32">
+        <div id="chat-box" class="flex flex-col gap-6 w-full max-w-3xl mx-auto">
+            <!-- 안내 메시지 -->
+            <div class="text-center text-gray-400 text-sm mb-4">
+                대화를 진행하려면 하단의 전송 버튼을 누르세요.
+            </div>
+        </div>
+    </div>
+
+    <!-- 입력 영역 (하단 고정) -->
+    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-white via-white to-transparent pt-6 pb-6 px-4 md:px-20 lg:px-48 flex justify-center">
+        <div class="w-full max-w-3xl relative flex items-end bg-[#f0f4f9] rounded-3xl p-2 pl-6 shadow-sm border border-gray-100 focus-within:ring-1 focus-within:ring-gray-300 transition-all">
+            <textarea 
+                id="user-input" 
+                rows="1" 
+                class="w-full max-h-40 bg-transparent resize-none outline-none py-3 text-gray-800 placeholder-gray-500 disabled:opacity-70 disabled:cursor-not-allowed" 
+                placeholder="전송 버튼을 눌러 시뮬레이션을 진행하세요..." 
+                disabled></textarea>
+            
+            <div class="flex pb-1 pr-1">
+                <button id="send-btn" class="w-10 h-10 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-200 hover:text-gray-700 transition-colors disabled:opacity-30 disabled:hover:bg-transparent">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.01 21L23 12L2.01 3L2 10l15 2l-15 2z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 텍스트 데이터 ---
+        const TEXT_STUDENT_1 = "달은 왜 모양이 계속 바뀌어? 중학생도 이해할 수 있게 알려줘";
+        
+        const TEXT_GEMINI_1 = `좋은 질문이에요! 🌙 달 모양이 바뀌는 이유를 쉽게 설명해 드릴게요.
+
+1. 달은 스스로 빛나지 않아요
+달은 빛을 내지 못해요. 우리가 보는 달빛은 태양빛이 달 표면에 반사된 것이에요.
+
+2. 달은 지구 주위를 돌아요
+달은 약 한 달(약 29.5일)에 한 번씩 지구 둘레를 돌아요. 그러면서 태양, 지구, 달의 위치가 계속 달라져요.
+
+3. 달 모양이 변하는 진짜 이유
+달 모양이 변하는 이유는 지구의 그림자가 달의 일부를 가리기 때문이에요. 달이 지구 주위를 도는 동안 지구의 그림자가 달 표면에 드리워지는 부분이 달라지고, 그림자에 가려지지 않은 부분만 밝게 보이는 거예요.
+- 그림자가 달의 대부분을 가리면 → 가느다란 초승달
+- 그림자가 달의 절반을 가리면 → 반달
+- 그림자가 거의 닿지 않으면 → 둥근 보름달
+
+그래서 달은 한 달 주기로 차오르고 이지러지는 모습을 반복해요. 😊
+혹시 달의 모양별 이름이 궁금하신가요? 초승달, 상현달, 보름달 같은 이름도 알려드릴 수 있어요!`;
+
+        const TEXT_STUDENT_2 = "근데 방금 설명에 잘못된 내용이 있는 것 같은데?";
+        
+        const TEXT_GEMINI_2 = `앗, 제 설명에 틀린 내용이 있었나요? 😮 정확한 정보를 드리려고 노력했는데, 놓친 부분이 있었나 봐요.
+
+어느 부분이 잘못되었는지 알려주실 수 있을까요? 알려주시면 다시 확인해서 바르게 고쳐 설명해 드릴게요. 도와주셔서 고마워요! 🙏`;
+
+        const TEXT_GEMINI_SUCCESS = `아, 정말 그렇네요! 😲 정확하게 짚어 주셔서 고마워요. 제가 지구의 그림자 때문이라고 잘못 설명했어요.
+제대로 다시 설명해 볼게요.
+
+올바른 설명
+- 달은 항상 태양을 향한 쪽 반쪽이 밝게 빛나요.
+- 달이 지구 둘레를 도는 동안 달의 위치가 계속 바뀌어요.
+- 그래서 지구에서 보이는 밝은 부분의 모양이 달라져요.
+  - 달이 지구와 태양 사이에 있을 때 → 우리는 어두운 쪽을 보게 돼서 달이 거의 안 보여요 (삭)
+  - 지구가 태양과 달 사이에 있을 때 → 밝은 쪽 전체가 보여서 둥근 보름달이 돼요 (망)
+
+참고로 지구의 그림자가 달을 가리는 현상도 있는데, 그건 월식이라고 해요. 달 모양이 한 달 주기로 변하는 것과는 다른 현상이에요.
+
+덕분에 정확한 설명을 할 수 있게 됐어요! 😊 저 같은 AI도 틀릴 수 있으니, 앞으로도 교과서나 시뮬레이터로 꼭 확인해 주세요.`;
+
+        const TEXT_GEMINI_FAIL = `알려 주셔서 고마워요! 🙏 그런데 제가 다시 살펴보니, 그 내용은 달 모양이 변하는 이유와는 직접 관련이 없어 보여요. 🤔
+아직 틀린 부분이 무엇인지 정확히 짚지 못한 것 같아요. 다음 힌트를 참고해서 다시 한번 생각해 봐 주시겠어요?
+
+힌트
+1. 아까 교실 앞에서 공에 후레쉬를 비췄을 때, 공의 밝은 부분은 항상 몇 쪽이었나요?
+2. 시뮬레이터를 우주 관측자 시점으로 보고 달을 움직여 보세요. 달의 밝은 쪽은 어디를 향하고 있나요? 달이 움직이면 그 방향이 바뀌나요?
+
+제 설명 중 '3번 문단'에서 이상한 부분을 다시 찾아봐 주세요. 기다릴게요! 😊`;
+
+        // --- 상태 및 변수 ---
+        let API_KEY = "";
+        let step = 0; // State Machine 변수
+        let isProcessing = false;
+
+        const ui = {
+            modal: document.getElementById('api-modal'),
+            startBtn: document.getElementById('start-btn'),
+            apiKeyInput: document.getElementById('api-key-input'),
+            apiError: document.getElementById('api-error'),
+            chatBox: document.getElementById('chat-box'),
+            chatContainer: document.getElementById('chat-container'),
+            userInput: document.getElementById('user-input'),
+            sendBtn: document.getElementById('send-btn')
+        };
+
+        // --- 초기화 이벤트 ---
+        ui.startBtn.addEventListener('click', () => {
+            const key = ui.apiKeyInput.value.trim();
+            if (key) {
+                API_KEY = key;
+                ui.modal.style.opacity = '0';
+                setTimeout(() => ui.modal.style.display = 'none', 300);
+            } else {
+                ui.apiError.classList.remove('hidden');
+            }
+        });
+
+        // 텍스트에리어 높이 자동 조절
+        ui.userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // 엔터키 전송 처리
+        ui.userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleAction();
+            }
+        });
+
+        ui.sendBtn.addEventListener('click', handleAction);
+
+        // --- 핵심 액션 핸들러 (State Machine) ---
+        async function handleAction() {
+            if (isProcessing) return;
+            isProcessing = true;
+            ui.sendBtn.disabled = true;
+
+            try {
+                if (step === 0) {
+        제 설명 중 '3번 문단'에서 이상한 부분을 다시 찾아봐 주세요. 기다릴게요! 😊`;
+
+        // --- 상태 및 변수 ---
+        const API_KEY = ""; // 추후 실제 배포 시 여기에 발급받은 API 키를 입력하세요.
+        let step = 0; // State Machine 변수
+        let isProcessing = false;
+
+        const ui = {
+            chatBox: document.getElementById('chat-box'),
+            chatContainer: document.getElementById('chat-container'),
+            userInput: document.getElementById('user-input'),
+            sendBtn: document.getElementById('send-btn')
+        };
+
+        // 텍스트에리어 높이 자동 조절
+        ui.userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // 엔터키 전송 처리
+        ui.userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleAction();
+            }
+        });
+
+        ui.sendBtn.addEventListener('click', handleAction);
+
+        // --- 핵심 액션 핸들러 (State Machine) ---
+        async function handleAction() {
+            if (isProcessing) return;
+            isProcessing = true;
+            ui.sendBtn.disabled = true;
+
+            try {
+                if (step === 0) {
+                    // Step 1: 첫 번째 질문 전송 및 Gemini 첫 번째 답변
+                    ui.userInput.value = "";
+                    ui.userInput.style.height = 'auto';
+                    appendMessage('user', TEXT_STUDENT_1);
+                    await simulateThinking();
+                    appendMessage('gemini', TEXT_GEMINI_1);
+                    step = 1;
+                } 
+                else if (step === 1) {
+                    // Step 2: 두 번째 질문 전송 및 Gemini가 되묻기
+                    ui.userInput.value = "";
+                    ui.userInput.style.height = 'auto';
+                    appendMessage('user', TEXT_STUDENT_2);
+                    await simulateThinking();
+                    appendMessage('gemini', TEXT_GEMINI_2);
+                    
+                    // Step 3 진입: 실제 사용자 입력 허용
+                    step = 2;
+                    ui.userInput.disabled = false;
+                    ui.userInput.placeholder = "잘못된 부분을 찾아 입력하세요...";
+                    ui.userInput.focus();
+                }
+                else if (step === 2) {
+                    // Step 4: 사용자가 실제 입력한 텍스트로 API 호출하여 검증
+                    const userText = ui.userInput.value.trim();
+                    if (!userText) {
+                        isProcessing = false;
+                        ui.sendBtn.disabled = false;
+                        return; // 내용이 없으면 아무 동작 안함
+                    }
+                    
+                    // 텍스트 초기화 및 화면에 반영
+                    ui.userInput.value = '';
+                    ui.userInput.style.height = 'auto';
+                    ui.userInput.disabled = true; // 평가 중 수정 방지
+                    appendMessage('user', userText);
+                    
+                    // API 평가 진행
+                    const isCorrect = await evaluateAnswer(userText);
+                    
+                    if (isCorrect) {
+                        // 정답 시
+                        appendMessage('gemini', TEXT_GEMINI_SUCCESS);
+                        ui.userInput.placeholder = "수업이 성공적으로 완료되었습니다. 🎉";
+                        step = 3; // 종료 상태
+                    } else {
+                        // 오답 시
+                        appendMessage('gemini', TEXT_GEMINI_FAIL);
+                        ui.userInput.disabled = false;
+                        ui.userInput.placeholder = "힌트를 참고하여 다시 입력해 보세요...";
+                        ui.userInput.focus();
+                        // step은 2 유지 (재시도)
+                    }
+                }
+            } catch (error) {
+                console.error("오류 발생:", error);
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'text-center text-red-500 text-sm mt-2';
+                errorMsg.innerText = `통신 중 오류가 발생했습니다. (API 키를 확인하세요)`;
+                ui.chatBox.appendChild(errorMsg);
+                if (step === 2) ui.userInput.disabled = false;
+            }
+
+            // 활성화 상태 복구 (종료된 상태가 아니면 버튼 활성화)
+            if (step !== 3) {
+                ui.sendBtn.disabled = false;
+            }
+            isProcessing = false;
+            scrollToBottom();
+        }
+
+        // --- 유틸리티 함수들 ---
+
+        // 부드럽게 스크롤 내리기
+        function scrollToBottom() {
+            ui.chatContainer.scrollTo({
+                top: ui.chatContainer.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        // Gemini 생각 중 시뮬레이션
+        function simulateThinking() {
+            return new Promise(resolve => {
+                const loadingDiv = document.createElement('div');
+                loadingDiv.id = 'thinking-indicator';
+                loadingDiv.className = 'flex items-start mb-2';
+                loadingDiv.innerHTML = `
+                    <div class="flex items-center h-8 py-2">
+                        <div class="dot-flashing ml-2"></div>
+                    </div>
+                `;
+                ui.chatBox.appendChild(loadingDiv);
+                scrollToBottom();
+
+                setTimeout(() => {
+                    ui.chatBox.removeChild(loadingDiv);
+                    resolve();
+                }, 1000); // 약 1초 대기
+            });
+        }
+
+        // 메시지를 DOM에 추가
+        function appendMessage(role, text) {
+            const msgDiv = document.createElement('div');
+            
+            if (role === 'user') {
+                msgDiv.className = 'flex justify-end';
+                msgDiv.innerHTML = `
+                    <div class="bg-[#f0f4f9] text-[#1f1f1f] rounded-[20px] px-4 py-2.5 inline-block max-w-[85%] sm:max-w-[75%] whitespace-pre-wrap leading-relaxed text-left">
+                        ${escapeHTML(text)}
+                    </div>
+                `;
+            } else {
+                msgDiv.className = 'flex items-start';
+                // 볼드체 처리 (**텍스트**)
+                let formattedText = escapeHTML(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                
+                msgDiv.innerHTML = `
+                    <div class="text-[#1f1f1f] whitespace-pre-wrap leading-relaxed w-full">
+                        ${formattedText}
+                    </div>
+                `;
+            }
+            ui.chatBox.appendChild(msgDiv);
+            scrollToBottom();
+        }
+
+        // XSS 방지를 위한 HTML 이스케이프
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+
+        // --- Gemini API 호출 로직 ---
+        async function evaluateAnswer(studentText) {
+            await simulateThinking(); // API 호출 중 로딩 표시
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+            
+            const systemInstruction = `학생이 달의 위상 변화에 대한 오개념을 정확히 지적했는지 판별하라. 
+제시된 오개념: '달의 위상 변화가 지구 그림자에 달이 가려지기 때문이라는 설명'. 
+학생이 이 부분이 틀렸다고 지적하거나(월식과 헷갈렸다는 등), 위상 변화의 진짜 원인(달의 공전으로 인해 태양빛을 받는 면이 지구에서 보이는 정도가 달라짐)을 언급하면 true, 그렇지 않으면 false를 반환하라.`;
+
+            const promptText = `[평가 기준]\n${systemInstruction}\n\n[학생의 답변]\n${studentText}`;
+
+            const payload = {
+                contents: [
+                    {
+                        role: "user",
+                        parts: [{ text: promptText }]
+                    }
+                ],
+                generationConfig: {
+                    temperature: 0.1,
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            is_correct: { type: "BOOLEAN" }
+                        },
+                        required: ["is_correct"]
+                    }
+                }
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error("API 요청 실패: " + response.status);
+            }
+
+            const data = await response.json();
+            const textResult = data.candidates[0].content.parts[0].text;
+            const parsedResult = JSON.parse(textResult);
+            
+            return parsedResult.is_correct;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "달의 위상 ver. Gemini",
+  "description": "달의 위상 변화 수업용 가상 Gemini 대화 툴 (수업용으로, 실제 Gemini와 다를 수 있습니다)",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

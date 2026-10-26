@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+/* 스크롤바 커스텀 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 타이핑 및 로딩 애니메이션 */
+.dot-flashing {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 5px;
+  background-color: #a1a1aa;
+  color: #a1a1aa;
+  animation: dot-flashing 1s infinite linear alternate;
+  animation-delay: 0.5s;
+}
+.dot-flashing::before, .dot-flashing::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 5px;
+  background-color: #a1a1aa;
+  color: #a1a1aa;
+  animation: dot-flashing 1s infinite alternate;
+}
+.dot-flashing::before {
+  left: -12px;
+  animation-delay: 0s;
+}
+.dot-flashing::after {
+  left: 12px;
+  animation-delay: 1s;
+}
+@keyframes dot-flashing {
+  0% { background-color: #a1a1aa; }
+  50%, 100% { background-color: #e4e4e7; }
+}
+
+/* 텍스트 줄바꿈 처리 */
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
