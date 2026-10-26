@@ -7,7 +7,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { RotateCcw, X, Check, Shuffle, Sparkles } from 'lucide-react';
 
 // 사용자 지정 API 키
-const API_KEY = "AQ.Ab8RN6JivcmpEyRJtwv0yIMNUSLr57yKED9u_pGuvck77t_S9Q";
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 // --- 세트 데이터 구조 정의 ---
 export interface LessonSet {
