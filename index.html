@@ -3,7 +3,7 @@
   <head>
     <link rel="icon" href="data:,">
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
     <title>달의 위상 ver. Gemini</title>
     <meta name="description" content="달의 위상 변화 수업용 가상 Gemini 대화 툴 (수업용으로, 실제 Gemini와 다를 수 있습니다)" />
     <meta property="og:title" content="달의 위상 ver. Gemini" />
@@ -15,8 +15,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
   </head>
-  <body class="h-screen flex flex-col overflow-hidden text-gray-800 bg-white">
-    <div id="root" class="h-full w-full flex flex-col"></div>
+  <body class="app-shell flex flex-col overflow-hidden text-gray-800 bg-white">
+    <div id="root" class="h-full w-full min-h-0 flex flex-col"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
