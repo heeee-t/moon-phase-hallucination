@@ -810,17 +810,17 @@ export default function App() {
   const isSendDisabled = isProcessing || step === 3;
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden text-gray-800 bg-white select-text relative">
+    <div className="h-full min-h-0 flex flex-col overflow-hidden text-gray-800 bg-white select-text relative">
       {/* 토스트 알림 (교사용 세트 변경 시 잠시 표시) */}
       {toastMessage && (
-        <div className="absolute top-18 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white text-xs sm:text-sm px-4 py-2 rounded-full shadow-lg flex items-center gap-2 animate-bounce">
+        <div className="absolute top-16 sm:top-18 left-1/2 -translate-x-1/2 z-50 max-w-[90%] bg-gray-900 text-white text-xs sm:text-sm px-4 py-2 rounded-full shadow-lg flex items-center gap-2 animate-bounce">
           <Sparkles className="w-4 h-4 text-amber-300" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* 헤더 영역 */}
-      <header className="h-16 flex items-center justify-between px-4 sm:px-6 border-b border-gray-100 flex-shrink-0 bg-white">
+      <header className="min-h-14 sm:h-16 flex items-center justify-between gap-2 px-3 sm:px-6 py-2 sm:py-0 border-b border-gray-100 flex-shrink-0 bg-white">
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
           <div className="flex items-center gap-1.5 font-medium tracking-tight text-gray-700 text-base sm:text-lg">
             <span className="font-semibold text-gray-800">달의 위상</span>
@@ -858,7 +858,7 @@ export default function App() {
       <div
         id="chat-container"
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto px-4 py-8 md:px-20 lg:px-48 pb-32"
+        className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 sm:px-6 md:px-12 lg:px-24 xl:px-48 py-6 sm:py-8 pb-28 sm:pb-32"
       >
         <div id="chat-box" className="flex flex-col gap-6 w-full max-w-3xl mx-auto">
           {/* 상단 안내 메시지 */}
@@ -908,8 +908,8 @@ export default function App() {
       </div>
 
       {/* 입력 영역 (하단 고정) */}
-      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-white via-white to-transparent pt-6 pb-6 px-4 md:px-20 lg:px-48 flex justify-center pointer-events-none">
-        <div className="w-full max-w-3xl relative flex items-end bg-[#f0f4f9] rounded-3xl p-2 pl-6 shadow-sm border border-gray-100 focus-within:ring-1 focus-within:ring-gray-300 transition-all pointer-events-auto">
+      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-white via-white to-transparent pt-4 sm:pt-6 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:pb-6 px-4 sm:px-6 md:px-12 lg:px-24 xl:px-48 flex justify-center pointer-events-none">
+        <div className="w-full max-w-3xl relative flex items-end bg-[#f0f4f9] rounded-3xl p-2 pl-4 sm:pl-6 shadow-sm border border-gray-100 focus-within:ring-1 focus-within:ring-gray-300 transition-all pointer-events-auto">
           <textarea
             id="user-input"
             ref={textareaRef}
@@ -919,7 +919,7 @@ export default function App() {
             onKeyDown={handleKeyDown}
             disabled={isInputDisabled}
             placeholder={placeholder}
-            className="w-full max-h-40 bg-transparent resize-none outline-none py-3 text-gray-800 placeholder-gray-500 disabled:opacity-70 disabled:cursor-not-allowed text-[15px]"
+            className="w-full max-h-28 sm:max-h-40 bg-transparent resize-none outline-none py-2.5 sm:py-3 text-gray-800 placeholder-gray-500 disabled:opacity-70 disabled:cursor-not-allowed text-[15px]"
           />
 
           <div className="flex pb-1 pr-1">
@@ -928,7 +928,7 @@ export default function App() {
               onClick={handleAction}
               disabled={isSendDisabled}
               aria-label="전송"
-              className="w-10 h-10 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-200 hover:text-gray-700 transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+              className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-200 hover:text-gray-700 transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2.01 21L23 12L2.01 3L2 10l15 2l-15 2z" fill="currentColor" />
@@ -940,8 +940,8 @@ export default function App() {
 
       {/* 비밀 수업 세트 선택 모달 */}
       {isTeacherModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 max-w-lg w-full p-6 animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-3 sm:p-4">
+          <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 max-w-lg w-full max-h-[90dvh] overflow-y-auto overscroll-contain p-4 sm:p-6 animate-in fade-in zoom-in-95 duration-150">
             {/* 모달 헤더 */}
             <div className="flex items-center justify-between pb-4 border-b border-gray-100">
               <div className="flex items-center gap-2.5 min-w-0">
@@ -987,7 +987,7 @@ export default function App() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-gray-900 text-sm whitespace-nowrap">무작위 배정 (랜덤) - 기본값</span>
+                    <span className="font-semibold text-gray-900 text-sm break-keep">무작위 배정 (랜덤) - 기본값</span>
                     {selectionMode === 'random' && <Check className="w-4 h-4 text-blue-600 shrink-0 ml-2" />}
                   </div>
                   <p className="text-xs text-gray-500 mt-0.5 break-keep">
@@ -1011,7 +1011,7 @@ export default function App() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-gray-900 text-sm whitespace-nowrap">달 모양 변화의 원인</span>
+                    <span className="font-semibold text-gray-900 text-sm break-keep">달 모양 변화의 원인</span>
                     {selectionMode === 'A' && <Check className="w-4 h-4 text-blue-600 shrink-0 ml-2" />}
                   </div>
                   <p className="text-xs text-gray-500 mt-0.5 break-keep">
@@ -1035,7 +1035,7 @@ export default function App() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-gray-900 text-sm whitespace-nowrap">달의 공전 위치</span>
+                    <span className="font-semibold text-gray-900 text-sm break-keep">달의 공전 위치</span>
                     {selectionMode === 'B' && <Check className="w-4 h-4 text-blue-600 shrink-0 ml-2" />}
                   </div>
                   <p className="text-xs text-gray-500 mt-0.5 break-keep">
@@ -1059,7 +1059,7 @@ export default function App() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-gray-900 text-sm whitespace-nowrap">음력 날짜와 달의 모양</span>
+                    <span className="font-semibold text-gray-900 text-sm break-keep">음력 날짜와 달의 모양</span>
                     {selectionMode === 'C' && <Check className="w-4 h-4 text-blue-600 shrink-0 ml-2" />}
                   </div>
                   <p className="text-xs text-gray-500 mt-0.5 break-keep">
